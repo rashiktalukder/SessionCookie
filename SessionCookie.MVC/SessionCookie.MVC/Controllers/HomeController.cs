@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SessionCookie.MVC.Filters;
 using SessionCookie.MVC.Models;
 using System.Diagnostics;
 
@@ -13,8 +14,13 @@ namespace SessionCookie.MVC.Controllers
             _logger = logger;
         }
 
+        [SessionAuthorize]
         public IActionResult Index()
         {
+            /*if (HttpContext.Session.GetString("Username") == null)
+            {
+                return RedirectToAction("Login","Account");
+            }*/
             return View();
         }
 

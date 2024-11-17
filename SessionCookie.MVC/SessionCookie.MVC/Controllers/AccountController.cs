@@ -24,12 +24,27 @@ namespace SessionCookie.MVC.Controllers
             var response = await _httpClient.PostAsJsonAsync("http://localhost:5145/api/User/login", logInRequest);
             if (response.IsSuccessStatusCode)
             {
+                HttpContext.Session.SetString("Username", logInRequest.UserName);
                 ViewBag.Message = "Login Successful!";
                 //return RedirectToAction("Login");
                 return RedirectToAction("Index", "Home");
             }
             ViewBag.Message = "Login Failed. Try a different Username";
             return RedirectToAction("Index","Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogoutUser()
+        {
+            var response = await _httpClient.PostAsync("http://localhost:5145/api/User/logout", null);
+            if (response.IsSuccessStatusCode)
+            {
+                var sessionName = HttpContext.Session.GetString("Username");
+                HttpContext.Session.Clear();
+                return RedirectToAction("Login", "Account");
+            }
+            ViewBag.Message = "Error during logout. Please try again.";
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

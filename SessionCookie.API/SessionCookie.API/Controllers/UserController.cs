@@ -57,5 +57,13 @@ namespace SessionCookie.API.Controllers
 
             return Ok("User Registerd Successfully");
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var session = HttpContext.Session.GetString("Username");
+            HttpContext.Session.Clear();
+            return Ok("Logout Successful!");
+        }
     }
 }
